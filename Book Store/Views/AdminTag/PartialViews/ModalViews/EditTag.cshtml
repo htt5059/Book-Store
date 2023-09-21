@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Book_Store.Models.ViewModels.TagVM
+
+<div class="modal fade" id="TagEditor" tabindex="-1" role="form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Tag Editor</h5>
+            </div>
+            <div class="modal-body">
+                <form class="m-2" method="post">
+                    <div class="row row-cols-2 mb-1">
+                        <div class="col col-4 p-0">
+                            <label class="col-form-label">ID</label>
+                        </div>
+                        <div class="col col-8 p-0">
+                            <input class="form-control" id="modal-id" type="text" asp-for="TagRequest.ID" value="" readonly />
+                        </div>
+                    </div>
+                    <div class="row row-cols-2 mb-1">
+                        <div class="col col-4 p-0">
+                            <label class="col-form-label p-0">Name</label>
+                        </div>
+                        <div class="col col-8 p-0">
+                            <input class="form-control" id="modal-name" type="text" asp-for="TagRequest.Name" value="" />
+                        </div>
+                    </div>
+                    <div class="row row-cols-2 mb-1">
+                        <div class="col col-4 p-0">
+                            <label class="col-form-label p-0">Display Name</label>
+                        </div>
+                        <div class="col col-8 p-0">
+                            <input class="form-control" id="modal-displayName" type="text" asp-for="TagRequest.DisplayName" value="" />
+                        </div>
+                    </div>
+                    <div class="m-1 p-0 d-flex justify-content-around">
+                        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <input class="form-control d-none" id="modal-action" type="text" asp-for="TagRequest.Action" value="" readonly/>
+                        <button type="submit" class="btn btn-dark btn-primary" id="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Book_Store.Models.ViewModels.BlogVM
+@{
+    ViewBag.Title = "Add Blog";
+}
+
+@section Scripts{
+    <script>
+        var editor = new FroalaEditor('#content', {
+            imageUploadURL: '/api/images'
+        })
+
+
+        const featuredImageUrl = document.getElementById('imgUrl')
+        const el = document.getElementById('featuredImageUpload')
+        const img = document.getElementById('featureImage')
+
+        if (featuredImageUrl.value != null) {
+            img.src = featuredImageUrl.value
+            img.style.display = 'block'
+        }
+
+        async function uploadFeaturedImage(e) {
+            console.log(e.target.files[0])
+            let data = new FormData();
+            data.append('file', e.target.files[0])
+
+            await fetch('/api/images', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                body: data
+            }).then(res => res.json())
+            .then(result => {
+                featuredImageUrl.value = result.link
+                img.src= result.link
+                img.style.display = 'block'
+            })
+        }
+        el.addEventListener('change', uploadFeaturedImage)
+    </script>
+}
+
+<div class="py-2">
+    <div class="container">
+        <h1 class="text-center">Add New Blog - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-4">
+    @if (Model.Blog != null)
+    {
+        <form method="post">
+            <partial name="./PartialViews/BlogForm.cshtml"></partial>
+            <div class="mb-3 d-flex justify-content-center align-items-center">
+                <div>
+                    <button type="submit" class="btn btn-dark" asp-action="Update" asp-controller="AdminBlog" asp-route-id="@Model.BlogRequest.Id">Save</button>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <form method="post">
+            <partial name="./PartialViews/BlogForm.cshtml"></partial>
+            <div class="mb-3 d-flex justify-content-center align-items-center">
+                <div>
+                    <button type="submit" class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </form>
+    }
+</div>

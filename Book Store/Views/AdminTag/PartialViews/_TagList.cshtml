@@ -1,0 +1,113 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Book_Store.Models.ViewModels.TagVM
+@{
+    ViewBag.Title = "Tags";
+}
+
+<script>
+    function bindData(tagObj) {
+        var tag = JSON.parse(tagObj)
+        $('#modal-name')[0].value = tag.name
+        $('#modal-displayName')[0].value = tag.displayName
+        $('#modal-id')[0].value = tag.id
+        console.log(tag.action)
+        if (tag.action === 'Edit') {
+            $('#submit')[0].textContent = "Save"
+            $('#modal-action')[0].value = "Update"
+        }
+        if (tag.action === 'Delete') {
+            let el = $('#submit')[0]
+            el.textContent = "Delete"
+            el.style.backgroundColor = "#FF0000"
+            $('#modal-action')[0].value = "Delete"
+        }
+    }
+</script>
+
+<div class="container py-5">
+    @if (Model.TagList != null && Model.TagList.Any())
+    {
+        <div class="row row-cols-3 rol-cols-sm-4 border-bottom border-dark">
+            <div class="col col-4 col-sm-3 d-none d-sm-block">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h6 class="text-center">Id</h6>
+                </div>
+            </div>
+            <div class="col col-4 col-sm-4">
+                <div class="d-flex justify-content-center">
+                    <h6 class="text-center">Name</h6>
+                </div>
+            </div>
+            <div class="col col-4 col-sm-4">
+                <div class="d-flex justify-content-center">
+                    <h6 class="text-center">Display Name</h6>
+                </div>
+            </div>
+            <div class="col col-4 col-sm-1">
+                <div class="d-flex justify-content-center">
+                    <h6 class="text-center">Actions</h6>
+                </div>
+            </div>
+        </div>
+        @foreach (var tag in Model.TagList)
+        {
+            <div class="row row-cols-3 row-cols-sm-4">
+                <div class="col col-4 col-sm-3 d-none d-sm-block d-flex justify-content-center">
+                    <p>@tag.ID</p>
+                </div>
+
+                <div class="col col-4 col-sm-4 d-flex align-items-center justify-content-center">
+                    @if (tag.Name == null)
+                    {
+                        <p class="text-center text-danger font-weight-bold">NULL</p>
+                    }
+                    else
+                    {
+                        <p class="text-center">@tag.Name</p>
+                    }
+                </div>
+                <div class="col col-4 col-sm-4 d-flex align-items-center justify-content-center">
+                    @if (tag.DisplayName == null)
+                    {
+                        <p class="text-center text-danger font-weight-bolder">NULL</p>
+                    }
+                    else if (tag.DisplayName.ToLower() == "error")
+                    {
+                        <p class="text-center text-danger font-weight-bolder">@tag.DisplayName.ToUpper()</p>
+                    }
+                    else 
+                    {
+                        <p class="text-center">@tag.DisplayName</p>
+                    }
+                </div>
+                <div class="col col-4 col-sm-1">
+                    <div class="row row-cols-2">
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <button type="button" class="bg-transparent border-2 border-warning rounded-circle edit-button" style="width:32px; height:32px"
+                                    data-toggle="modal" data-target="#TagEditor" onclick="bindData(JSON.stringify({ id: '@tag.ID', name: '@tag.Name', displayName: '@tag.DisplayName', action: 'Edit' }))">
+                                <span class="text-warning">&#x270f;</span>
+                            </button>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <button type="button" class="bg-transparent border-2 border-danger rounded-circle edit-button" style="width:32px; height:32px"
+                                    data-toggle="modal" data-target="#TagEditor" onclick="bindData(JSON.stringify({ id: '@tag.ID', name: '@tag.Name', displayName: '@tag.DisplayName', action: 'Delete' }))">
+                                <i class="bi bi-trash text-danger"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="font-weight-bold text-danger fs-3 text-center">No Tags Found!</p>
+    }
+</div>
+
+<partial name="./ModalViews/EditTag.cshtml"/>

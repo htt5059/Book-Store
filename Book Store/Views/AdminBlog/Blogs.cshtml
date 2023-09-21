@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<Book_Store.Models.Domains.BlogModel>
+@{
+    ViewBag.Title = "Blog List";
+}
+
+<script>
+    function onclick(params) {
+        // var obj = JSON.parse(params)
+        console.log(params)
+    }
+</script>
+
+<div class="py-2">
+    <div class="container">
+        <h1 class="text-center">Blogs - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row row-cols-12 border-bottom border-dark">
+        <div class="col col-3 d-none d-lg-block">
+            <h6 class="text-center">Id</h6>
+        </div>
+        <div class="col col-5 col-sm-4">
+            <h6 class="text-center">Heading</h6>
+        </div>
+        <div class="col col-md-2 d-none d-md-block col-lg-1">
+            <h6 class="text-center">Visible</h6>
+        </div>
+        <div class="col col-3 d-none d-sm-block col-lg-2">
+            <h6 class="text-center">Published Date</h6>
+        </div>
+        <div class="col col-4 col-md-2 col-lg-1">
+            <h6 class="text-center">Author</h6>
+        </div>
+        <div class="col col-2 col-sm-1">
+            <h6 class="text-center">Action</h6>
+        </div>
+    </div>
+    @foreach(var blog in Model)
+    {
+        <div class="row row-cols-12 border-top border-light-2">
+            <div class="col col-3 d-none d-lg-block">
+                <p>@blog.Id</p>
+            </div>
+            <div class="col col-5 col-sm-4">
+                <p>@blog.Heading</p>
+            </div>
+            <div class="col col-md-2 d-none d-md-block col-lg-1">
+                <p class="text-center">@blog.Visible</p>
+            </div>
+            <div class="col col-3 d-none d-sm-block col-lg-2">
+                <p class="text-center">@blog.PublishDate.ToString("MM/dd/yyyy")</p>
+            </div>
+            <div class="col col-4 col-md-2 col-lg-1">
+                <p>@blog.Author</p>
+            </div>
+            <div class="col col-2 col-sm-1">
+                <div class="d-flex justify-content-around align-items-center">
+                    <a asp-area="" asp-controller="AdminBlog" asp-action="Blog" asp-route-id="@blog.Id">
+                        <button class="bg-transparent border-2 border-success rounded-circle">
+                            <i class="bi bi-eye text-success"></i>
+                        </button>
+                    </a>
+                    <a asp-controller="AdminBlog" asp-action="Delete" asp-route-id ="@blog.Id">
+                        <button class="bg-transparent border-2 border-danger rounded-circle"
+                                data-toggle="modal" data-target="#ConfirmModal" onClick="onclick('@blog.Id')">
+                            <i class="bi bi-trash text-danger"></i>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

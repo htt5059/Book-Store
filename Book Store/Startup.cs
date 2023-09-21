@@ -1,6 +1,10 @@
+using Book_Store.Data;
+using Book_Store.Models.ViewModels;
+using Book_Store.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +28,19 @@ namespace Book_Store
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BookStoreDbConnectionString"))
+            );
+            services.AddDbContext<AuthDbContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("BookStoreAuthDbConnectionString"))
+            );
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AuthDbContext>();
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<IBlogAdapter, BlogAdapter>();
+            services.AddScoped<IImageRepository, CloudinaryImageRepository>();
+            services.AddScoped<IBlogLikesRepository, BlogLikesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +61,7 @@ namespace Book_Store
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

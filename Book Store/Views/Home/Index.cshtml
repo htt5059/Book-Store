@@ -2,7 +2,76 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model List<Book_Store.Models.ViewModels.BlogVM>
+
+<div class="container col-xxl-8 px-4">
+    <div class = "row align-items-center g-5 py-5">
+        <div class="col-12 col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">
+                Dong A Book Store - Blogs
+            </h1>
+            <span class="lead">
+                Dong A Book Store is a project covering .NET 7 and Bootstrap 5 as well as showcasing C#, HTML, ASP.NET MVC 7, plus T-SQL and Cloudinary. 
+                <br/>
+                Want to learn more about me?
+                <br />
+                You know where to find me!!! 
+                <br />
+                I'm waiting for your call and curious about how I can contribute to your business.
+            </span>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <img src="https://images.pexels.com/photos/2127039/pexels-photo-2127039.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+            alt="Dong A Blog"
+            class="d-block mx-lg-auto img-fluid w-100 w-lg-30"/>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var blog in Model)
+                {
+                    <a style="text-decoration:none" asp-area="" asp-controller="Blog" asp-action="Blog" asp-route-urlHandle="@blog.Blog.UrlHandled">
+                        <div class="bg-light box-shadow">
+                            <img src="@blog.Blog.FeaturedUrl" alt="@blog.Blog.Heading"
+                                 class="mb-2 d-block img-fluid"/>
+                            <h2 class="text-black mb-2 text-center ">@blog.Blog.Heading</h2>
+                            <p class="mb-1">
+                                <div class="row row-cols-2">
+                                    <div class="col col-6">
+                                        <p class="text-dark">Author: @blog.Blog.Author</p>
+                                    </div>
+                                    <div class="col col-6">
+                                        <p class="text-dark text-end fw-light">Date: @blog.Blog.PublishDate.ToShortDateString()</p>
+                                    </div>
+                                </div>
+                            </p>
+                            @foreach (var tag in blog.Blog.Tags)
+                            {
+                                <span class="badge bg-secondary me-1">@tag.DisplayName</span>
+                            }
+                            <p class="mb-6 text-dark">@blog.Blog.ShortDescription</p>
+                        </div>
+                    </a>
+                    @if (blog.BlogLikes < 2)
+                    {
+                        <div class="mb-3">
+                            <i class="bi bi-hand-thumbs-up">@blog.BlogLikes Like</i>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3">
+                            <i class="bi bi-hand-thumbs-up">@blog.BlogLikes Likes</i>
+                        </div>
+                    }
+                }    
+            }
+        </div>
+    </div>
 </div>

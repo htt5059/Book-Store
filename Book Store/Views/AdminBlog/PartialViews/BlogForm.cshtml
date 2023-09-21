@@ -1,0 +1,150 @@
+﻿@model Book_Store.Models.ViewModels.BlogVM
+
+
+@if (Model.Blog == null)
+{
+    <label class="form-check-label">
+        Visible
+    </label>
+    <input class="form-check-input" type="checkbox" value=true id="visible" asp-for="BlogRequest.Visible">
+}
+else
+{
+    <div class="row row-cols-2">
+        <div class="col col-9 mb-3">
+            <label>ID</label>
+            <input class="form-control bg-light" type="text" id="id" value="@Model.Blog.Id" asp-for="BlogRequest.Id" readonly></input>
+        </div>
+        <div class="col col-3 mb-3">
+            <label class="form-check-label">
+                Visible
+            </label>
+            <input class="form-check-input" type="checkbox" value=true id="visible" asp-for="BlogRequest.Visible">
+        </div>
+    </div>
+}
+<div class="row row-cols-1 row-cols-sm-2">
+    <div class="col mb-3">
+        <label class="form-label">Heading</label>
+        @if (Model.Blog == null)
+        {
+            <input type="text" class="form-control" id="heading" value="" asp-for="BlogRequest.Heading" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="heading" value="@Model.Blog.Heading" asp-for="BlogRequest.Heading" />
+        }
+    </div>
+    <div class="col mb-3">
+        <label class="form-label">Title</label>
+        @if (Model.Blog == null)
+        {
+            <input type="text" class="form-control" id="title" value="" asp-for="BlogRequest.PageTitle" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="title" value="@Model.Blog.PageTitle" asp-for="BlogRequest.PageTitle" />
+        }
+    </div>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Content</label>
+    @if (Model.Blog == null)
+    {
+        <textarea class="form-control" id="content" value="" asp-for="BlogRequest.Content"></textarea>
+    }
+    else
+    {
+        <textarea class="form-control" id="content" value="@Model.Blog.Content" asp-for="BlogRequest.Content"></textarea>
+    }
+    
+</div>
+<div class="mb-3">
+    <label class="form-label">Description</label>
+    @if (Model.Blog == null)
+    {
+        <input type="text" class="form-control" id="shortDescription" value="" asp-for="BlogRequest.ShortDescription" />
+    }
+    else
+    {
+        <input type="text" class="form-control" id="shortDescription" value="@Model.Blog.ShortDescription" asp-for="BlogRequest.ShortDescription" />
+    }
+</div>
+
+<div class="mb-3">
+    <label class = "form-label"> Featured Image Upload</label>
+    <input type="file" id="featuredImageUpload" class="form-control"></input>
+    <img src="" id="featureImage" style="display: none; width: 300px;"></img>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2">
+    <div class="col mb-3">
+        <label class="form-label">Featured Image URL</label>
+        @if (Model.Blog == null)
+        {
+            <input type="text" class="form-control" id="imgUrl" value="" asp-for="BlogRequest.FeaturedUrl" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="imgUrl" value="@Model.Blog.FeaturedUrl" asp-for="BlogRequest.FeaturedUrl" />
+        }
+    </div>
+    <div class="col mb-3">
+        <label class="form-label">URL Handle</label>
+        @if (Model.Blog == null)
+        {
+            <input type="text" class="form-control" id="urlHandle" value="" asp-for="BlogRequest.UrlHandled" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="urlHandle" value="@Model.Blog.UrlHandled" asp-for="BlogRequest.UrlHandled" />
+        }
+    </div>
+</div>
+<div class="row row-cols-1 row-cols-sm-2">
+    <div class="mb-3">
+        <label class="form-label">Published Date</label>
+        @if (Model.Blog == null)
+        {
+            <input type="date" class="form-control" id="publishedDate" value="" asp-for="BlogRequest.PublishDate" />
+        }
+        else
+        {
+            string datetime = Model.Blog.PublishDate.ToString("yyyy-MM-dd");
+            <input type="date" class="form-control" id="publishedDate" value="@datetime" asp-for="BlogRequest.PublishDate" />
+        }
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Author</label>
+        @if (Model.Blog == null)
+        {
+            <input type="text" class="form-control" id="author" value="" asp-for="BlogRequest.Author" />
+        }
+        else
+        {
+            <input type="text" class="form-control" id="author" value="@Model.Blog.Author" asp-for="BlogRequest.Author" />
+        }
+    </div>
+</div>
+<div class="mb-3">
+    <label class="form-label">Tags</label>
+    @if (Model.Blog != null)
+    {
+        if (Model.Blog.Tags == null)
+        {
+            <select class="form-select" multiple="true" value="" asp-items="@Model.BlogRequest.Tags" asp-for="@Model.BlogRequest.SelectedTags">
+            </select>
+        }
+        else
+        {
+            <select class="form-select" multiple="true" value="@Model.BlogRequest.SelectedTags" asp-items="@Model.BlogRequest.Tags" asp-for="@Model.BlogRequest.SelectedTags">
+            </select>
+        }
+    }
+    else
+    {
+        <select class="form-select" multiple="true" value="" asp-items="@Model.BlogRequest.Tags" asp-for="@Model.BlogRequest.SelectedTags">
+        </select>
+    }
+</div>
