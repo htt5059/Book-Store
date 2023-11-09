@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+//using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +29,31 @@ namespace Book_Store
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession(options => {
+                options.Cookie.Name = "OpenAIConversationId";
+                options.IdleTimeout = TimeSpan.FromDays(30);
+                options.Cookie.IsEssential = true;
+            });
+            services.AddLogging(options => {
+                options.AddConsole();
+                options.ClearProviders();
+            });
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews();
+            services.AddSignalR();
+            
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BookStoreDbConnectionString"))
             );
             services.AddDbContext<AuthDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("BookStoreAuthDbConnectionString"))
+                options.UseSqlServer(Configuration.GetConnectionString("AuthDbConnectionString"))
             );
+            services.AddDbContext<OpenAIChatContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("OpenAIChatMessagesConnectionString"))
+            );
+
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>();
             services.AddScoped<ITagRepository, TagRepository>();
@@ -41,6 +61,7 @@ namespace Book_Store
             services.AddScoped<IBlogAdapter, BlogAdapter>();
             services.AddScoped<IImageRepository, CloudinaryImageRepository>();
             services.AddScoped<IBlogLikesRepository, BlogLikesRepository>();
+            services.AddScoped<IOpenAIRepository, OpenAIRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +77,8 @@ namespace Book_Store
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -63,13 +86,20 @@ namespace Book_Store
 
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.MapHub<OpenAIHub>("/openAI");
+            
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<OpenAIHub>("/openAI");
             });
         }
+    }
+
+    public class ApplicationLogs
+    {
     }
 }
