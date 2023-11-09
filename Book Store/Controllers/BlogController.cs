@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace Book_Store.Views.Blog
+namespace Book_Store.Controllers
 {
     public class BlogController : Controller
     {
         private readonly IBlogRepository _blogRepository;
         private readonly IBlogLikesRepository _blogLikesRepository;
 
-        public BlogController(IBlogRepository blogRepository, IBlogLikesRepository blogLikesRepository) {
+        public BlogController(IBlogRepository blogRepository, IBlogLikesRepository blogLikesRepository)
+        {
             _blogRepository = blogRepository;
             _blogLikesRepository = blogLikesRepository;
-        } 
+        }
 
         [HttpGet]
         public async Task<IActionResult> Blog(string urlHandle)
@@ -28,7 +29,7 @@ namespace Book_Store.Views.Blog
                 };
                 return View(blogVM);
             }
-            return View(new BlogVM { Blog = blog});
+            return View(new BlogVM { Blog = blog });
         }
     }
 }

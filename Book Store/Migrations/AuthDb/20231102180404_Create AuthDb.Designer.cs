@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book_Store.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230916192917_Creating Auth Db")]
-    partial class CreatingAuthDb
+    [Migration("20231102180404_Create AuthDb")]
+    partial class CreateAuthDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,15 +169,15 @@ namespace Book_Store.Migrations.AuthDb
                         {
                             Id = "7ba1ceb6-7e08-44fc-9ee7-ac7f99fab488",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0818cd42-3ff4-49ad-b938-35479aee324c",
+                            ConcurrencyStamp = "9ee5f16d-9e6a-4054-874d-67f1fd8583af",
                             Email = "superadmin@donga.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@DONGA.COM",
                             NormalizedUserName = "SUPERADMIN@DONGA.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDNBS9qBrGxkFKkt56u1W3BrQUpkxLJ5lzgWMgdG6RKbp0KkFU8X2y04jvVKpIgI0w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECcXeKs41gDyDrvYjNuavn3Ql0ucQajlWLPBb2Qz7Bcwg9cLD/V6N8/JLs4slNEYSg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0063410a-9df4-4605-9eab-290120d6f171",
+                            SecurityStamp = "92c75f01-62dd-470f-92b8-9f4f45df00a1",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@donga.com"
                         });

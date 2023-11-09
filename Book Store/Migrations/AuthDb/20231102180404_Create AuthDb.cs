@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Book_Store.Migrations.AuthDb
 {
     /// <inheritdoc />
-    public partial class CreatingAuthDb : Migration
+    public partial class CreateAuthDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -171,7 +171,7 @@ namespace Book_Store.Migrations.AuthDb
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "7ba1ceb6-7e08-44fc-9ee7-ac7f99fab488", 0, "0818cd42-3ff4-49ad-b938-35479aee324c", "superadmin@donga.com", false, false, null, "SUPERADMIN@DONGA.COM", "SUPERADMIN@DONGA.COM", "AQAAAAIAAYagAAAAEDNBS9qBrGxkFKkt56u1W3BrQUpkxLJ5lzgWMgdG6RKbp0KkFU8X2y04jvVKpIgI0w==", null, false, "0063410a-9df4-4605-9eab-290120d6f171", false, "superadmin@donga.com" });
+                values: new object[] { "7ba1ceb6-7e08-44fc-9ee7-ac7f99fab488", 0, "9ee5f16d-9e6a-4054-874d-67f1fd8583af", "superadmin@donga.com", false, false, null, "SUPERADMIN@DONGA.COM", "SUPERADMIN@DONGA.COM", "AQAAAAIAAYagAAAAECcXeKs41gDyDrvYjNuavn3Ql0ucQajlWLPBb2Qz7Bcwg9cLD/V6N8/JLs4slNEYSg==", null, false, "92c75f01-62dd-470f-92b8-9f4f45df00a1", false, "superadmin@donga.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

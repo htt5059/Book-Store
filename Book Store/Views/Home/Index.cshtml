@@ -11,13 +11,10 @@
                 Dong A Book Store - Blogs
             </h1>
             <span class="lead">
-                Dong A Book Store is a project covering .NET 7 and Bootstrap 5 as well as showcasing C#, HTML, ASP.NET MVC 7, plus T-SQL and Cloudinary. 
+                Dong A Book Store is a project covering ASP.NET MVC 7 and showcasing REST API, Cloudinary, OpenAI, SignalR, Bootstrap 5, CSS, and HTML. 
                 <br/>
-                Want to learn more about me?
-                <br />
-                You know where to find me!!! 
-                <br />
-                I'm waiting for your call and curious about how I can contribute to your business.
+                Want to learn more about me? Please click 
+                <a href="~/Huy Tran - Software Engineer - Resume.pdf" download>here</a>
             </span>
         </div>
 
@@ -36,6 +33,10 @@
             {
                 foreach (var blog in Model)
                 {
+                    if (blog.Blog.Visible == false)
+                    {
+                        continue;    
+                    }
                     <a style="text-decoration:none" asp-area="" asp-controller="Blog" asp-action="Blog" asp-route-urlHandle="@blog.Blog.UrlHandled">
                         <div class="bg-light box-shadow">
                             <img src="@blog.Blog.FeaturedUrl" alt="@blog.Blog.Heading"
