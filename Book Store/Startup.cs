@@ -45,7 +45,7 @@ namespace Book_Store
             
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BookStoreDbConnectionString"))
+                options.UseSqlServer(Configuration.GetConnectionString("AppDbConnectionString"))
             );
             services.AddDbContext<AuthDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("AuthDbConnectionString"))
