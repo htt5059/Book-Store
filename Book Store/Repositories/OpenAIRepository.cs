@@ -32,7 +32,6 @@ namespace Book_Store.Repositories
         private AuthDbContext _authDbContext;
         private IdentityUser _user;
         private readonly ILogger _logger;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
 
         public OpenAIRepository(IConfiguration configuration,
@@ -46,10 +45,9 @@ namespace Book_Store.Repositories
             _context = httpContext;
             _openAIDbContext = openAIDbContext;
             _authDbContext = authDbContext;
-            _signInManager = signInManager;
             _logger = logger;
 
-            var authentication = new APIAuthentication(_configuration.GetSection("OpenAI")["ApiKey"]);
+            var authentication = new APIAuthentication(Environment.GetEnvironmentVariable("Dong-A_OpenAI-API-Key"));
             _openAI = new OpenAIAPI(authentication);
             _conversation = _openAI.Chat.CreateConversation();
         }
@@ -71,7 +69,7 @@ namespace Book_Store.Repositories
                     return res.Replace("\n", "<br>");
                 }
                 catch (Exception e) {
-                    _logger.LogWarning(e.Message);
+                    _logger.LogError(e.Message);
                     return "";
                 }
             }
@@ -94,13 +92,14 @@ namespace Book_Store.Repositories
                         $"Check FeedChatLog() and _openAI.Chat.CreateChatCompletionAsync()");
                     return "";
                 }
-                string reply = res.Choices[0].Message.Content.Replace("\n", "<br>");
+                //string reply = res.Choices[0].Message.Content.Replace("\n", "<br>");
+                string reply = res.Replace("\n", "<br>");
 
                 _openAIDbContext.ChatMessages.Add(new ChatMessageModel() {
                     Role = "Assistant",
                     UserId = new Guid(userId),
                     Content = reply,
-                    Name = "OpenAI_" + (model == null? "ChatGPTTurbo" : model.ToString()),
+                    Name = "OpenAI_" + (model == null? "ChatConversation" : model.ToString()),
                     CreatedOn = DateTime.Now
                 });
                 _openAIDbContext.SaveChanges();
@@ -130,55 +129,44 @@ namespace Book_Store.Repositories
             });
         }
 
-        private async Task<ChatResult> FeedChatLogAsync(string newMessage = "") {
+        private async Task<string> FeedChatLogAsync(string newMessage = "") {
             if (_user == null)
                 return null;
 
             var chatLog = await GetChatLogRaw();
-            var chatContext = chatLog.ToList().OrderByDescending(x=> x.CreatedOn).Take(5);
+            //var chatContext = chatLog.ToList().OrderByDescending(x=> x.CreatedOn).Take(5);
+            var chatContext = chatLog.ToList().OrderByDescending(x => x.CreatedOn);
             if (chatContext.IsNullOrEmpty())
                 return null;
 
             List<ChatMessage> chatHistory = new List<ChatMessage>();
-            chatHistory.Add(new ChatMessage(ChatMessageRole.System, "For context, you're Blog AI Assistance who wrtites blogs according to user guidance, and uses statistic number from your database"));
+            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.System, "For context, you're Blog AI Assistance who wrtites blogs according to user guidance, and uses statistic number from your database"));
             
             foreach (var chat in chatContext) {
                 if (chat.Role == "Assistant")
-                    //{
-                    //    res = _openAI.Chat.CreateChatCompletionAsync(new ChatRequest() {
-                    //        Model = Model.ChatGPTTurbo,
-                    //        Temperature = 0.5,
-                    //        MaxTokens = 2048,
-                    //        Messages = new ChatMessage[] { new ChatMessage(ChatMessageRole.Assistant, chat.Content) }
-                    //    });
-                    //}
-                    chatHistory.Add(new ChatMessage(ChatMessageRole.Assistant, chat.Content));
+                    _conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, chat.Content));
+                //chatHistory.Add(new ChatMessage(ChatMessageRole.Assistant, chat.Content));
                 else
-                    //{
-                    //    res = _openAI.Chat.CreateChatCompletionAsync(new ChatRequest() {
-                    //        Model = Model.ChatGPTTurbo,
-                    //        Temperature = 0.5,
-                    //        MaxTokens = 2048,
-                    //        Messages = new ChatMessage[] { new ChatMessage(ChatMessageRole.User, chat.Content) }
-                    //    });
-                    //}
-                    chatHistory.Add(new ChatMessage(ChatMessageRole.User, chat.Content));
+                    _conversation.AppendMessage(new ChatMessage(ChatMessageRole.User, chat.Content));
+                    //chatHistory.Add(new ChatMessage(ChatMessageRole.User, chat.Content));
             }
 
             if(newMessage != "")
                 chatHistory.Add(new ChatMessage(ChatMessageRole.User, newMessage));
 
             try {
-                var res = await _openAI.Chat.CreateChatCompletionAsync(new ChatRequest() {
-                    Model = Model.ChatGPTTurbo,
-                    Temperature = 0.5,
-                    MaxTokens = 1024,
-                    Messages = chatHistory
-                });
+                //var res = await _openAI.Chat.CreateChatCompletionAsync(new ChatRequest() {
+                //    Model = Model.ChatGPTTurbo,
+                //    Temperature = 0.5,
+                //    MaxTokens = 1024,
+                //    Messages = chatHistory
+                //});
+                var res = await _conversation.GetResponseFromChatbotAsync();
+                
                 return res;
             }
             catch (Exception e) {
-                _logger.LogCritical(e.Message);
+                _logger.LogError(e.Message);
                 return null;
             }
         }

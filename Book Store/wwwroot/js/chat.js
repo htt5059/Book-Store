@@ -94,11 +94,6 @@ function createSendMessageDiv(message) {
 connection.on("RecieveMessage", function (message) {
     createReceiveMessageDiv(message);
     chatBody.scrollTop = chatBody.scrollHeight;
-    
-    //chatLog.push({
-    //    Role: "Assistance",
-    //    Message: message
-    //});
 });
 
 document.getElementById("exampleFormControlInput3").addEventListener("keypress", function (event) {

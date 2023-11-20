@@ -2,6 +2,7 @@
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -14,9 +15,9 @@ namespace Book_Store.Repositories
         public CloudinaryImageRepository(IConfiguration config) {
             _configuration = config;
             account = new Account(
-                _configuration.GetSection("Cloudinary")["CloudName"],
-                _configuration.GetSection("Cloudinary")["ApiKey"],
-                _configuration.GetSection("Cloudinary")["ApiSecret"]
+                Environment.GetEnvironmentVariable("Cloudinary_CloudName"),
+                Environment.GetEnvironmentVariable("Cloudinary_API-Key"),
+                Environment.GetEnvironmentVariable("Cloudinary_API-Secret")
                 );
         }
         public async Task<string> UploadImageAsync(IFormFile file)

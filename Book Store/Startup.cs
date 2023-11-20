@@ -42,16 +42,16 @@ namespace Book_Store
 
             services.AddControllersWithViews();
             services.AddSignalR();
-            
+
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AppDbConnectionString"))
+                options.UseSqlServer(Environment.GetEnvironmentVariable("AppDbConnectionString"))
             );
             services.AddDbContext<AuthDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("AuthDbConnectionString"))
+                options.UseSqlServer(Environment.GetEnvironmentVariable("AuthDbConnectionString"))
             );
             services.AddDbContext<OpenAIChatContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("OpenAIChatMessagesConnectionString"))
+                options.UseSqlServer(Environment.GetEnvironmentVariable("OpenAIChatMessagesConnectionString"))
             );
 
             services.AddIdentity<IdentityUser, IdentityRole>()
